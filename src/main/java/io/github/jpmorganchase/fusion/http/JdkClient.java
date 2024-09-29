@@ -1,5 +1,6 @@
 package io.github.jpmorganchase.fusion.http;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.net.*;
@@ -119,7 +120,7 @@ public class JdkClient implements Client {
 
         try {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 out.append(line);
             }
             reader.close();
