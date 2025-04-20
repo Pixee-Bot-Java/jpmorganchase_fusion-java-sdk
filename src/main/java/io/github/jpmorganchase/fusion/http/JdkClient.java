@@ -1,5 +1,7 @@
 package io.github.jpmorganchase.fusion.http;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.net.*;
@@ -98,7 +100,7 @@ public class JdkClient implements Client {
 
     private URL parseUrl(String path) {
         try {
-            return new URL(path);
+            return Urls.create(path, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             throw new ClientException(String.format("Malformed URL path received: %s", path), e);
         }
