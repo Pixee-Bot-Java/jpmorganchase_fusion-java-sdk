@@ -2,6 +2,8 @@ package io.github.jpmorganchase.fusion.http;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -56,7 +58,7 @@ public class JdkClientTest {
         BASE_URL = wiremock.getRuntimeInfo().getHttpBaseUrl();
         API_URL = String.format("%s%s", BASE_URL, BASE_PATH);
 
-        URL proxyUrl = new URL(wiremockProxy.getRuntimeInfo().getHttpBaseUrl());
+        URL proxyUrl = Urls.create(wiremockProxy.getRuntimeInfo().getHttpBaseUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         httpClientWithProxy = new JdkClient(
                 new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUrl.getHost(), wiremockProxy.getPort())));
 
